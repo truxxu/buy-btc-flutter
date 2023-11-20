@@ -6,7 +6,16 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Text('Hello World'),
+      // backgroundColor: Colors.black54,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(15),
+          child: Text(
+            'Hello World',
+            style: TextStyle(color: Colors.amber),
+          ),
+        ),
+      ),
     );
   }
 }
