@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
           child: Column(
             children: [
               const Text(
-                'Hello World',
+                'Home page',
               ),
               ElevatedButton(
                 onPressed: () {},
