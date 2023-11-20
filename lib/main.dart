@@ -12,8 +12,17 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Buy BTC!",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Poppins'),
+      theme: ThemeData(
+        useMaterial3: true,
+        fontFamily: 'Poppins',
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.amber,
+          background: Colors.black54,
+          brightness: Brightness.dark,
+        ),
+      ),
       home: const Home(),
     );
   }

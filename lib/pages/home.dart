@@ -5,14 +5,20 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      // backgroundColor: Colors.black54,
+    return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(15),
-          child: Text(
-            'Hello World',
-            style: TextStyle(color: Colors.amber),
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              const Text(
+                'Hello World',
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text("Button"),
+              )
+            ],
           ),
         ),
       ),
