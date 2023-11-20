@@ -48,7 +48,7 @@ class _BottomState extends State<Bottom> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.amber,
         onTap: _onItemTapped,
       ),
     );
