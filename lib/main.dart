@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pages/home.dart';
+import 'organisms/bottom.dart';
 
 void main() {
   runApp(const MainApp());
@@ -23,7 +23,7 @@ class MainApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const Home(),
+      home: const Bottom(),
     );
   }
 }
