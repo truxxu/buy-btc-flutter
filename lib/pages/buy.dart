@@ -29,8 +29,8 @@ class _BuyFormState extends State<BuyForm> {
   final _formKey = GlobalKey<FormState>();
 
   String? _validationError;
-
   bool get _showError => _validationError != null;
+  final priceController = TextEditingController();
 
   String? Function(String?)? get validator => (value) {
         if (value == null || value.isEmpty) {
@@ -41,15 +41,20 @@ class _BuyFormState extends State<BuyForm> {
 
   @override
   Widget build(BuildContext context) {
+    var price = 35500;
+    var inputValue = int.tryParse(priceController.text) ?? 0;
+    var computedAmount = inputValue * price;
+
     return Form(
       key: _formKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text(
-            'Enter the amount ot buy',
+            'Enter the amount of BTC to buy',
           ),
           TextFormField(
+            controller: priceController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: TextInputType.number,
             validator: (value) {
@@ -71,10 +76,9 @@ class _BuyFormState extends State<BuyForm> {
               border: InputBorder.none,
               hintText: "0",
             ),
-            textInputAction: TextInputAction.next,
           ),
-          const Text(
-            '~ 1,200 USD',
+          Text(
+            '~ $computedAmount USD',
           ),
           const SizedBox(
             height: 40,
