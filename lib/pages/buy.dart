@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/services.dart';
 
+import 'response.dart';
+
 class Buy extends StatelessWidget {
   const Buy({super.key});
 
@@ -121,7 +123,7 @@ class _BuyFormState extends State<BuyForm> {
       context: context,
       builder: (BuildContext context) {
         return SizedBox(
-          height: 500,
+          height: 350,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -139,7 +141,13 @@ class _BuyFormState extends State<BuyForm> {
                 ),
                 ElevatedButton(
                   child: const Text('Accept'),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Response()),
+                    );
+                  },
                 ),
               ],
             ),
