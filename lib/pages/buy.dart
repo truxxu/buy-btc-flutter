@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
+import 'package:flutter/services.dart';
 
 class Buy extends StatelessWidget {
   const Buy({super.key});
@@ -37,6 +38,10 @@ class _BuyFormState extends State<BuyForm> {
         if (value == null || value.isEmpty) {
           return 'error';
         }
+        if (Decimal.parse(value) < Decimal.parse("0.001") ||
+            Decimal.parse(value) > Decimal.parse('5')) {
+          return 'error';
+        }
         return null;
       };
 
@@ -56,6 +61,10 @@ class _BuyFormState extends State<BuyForm> {
             'Enter the amount of BTC to buy',
           ),
           TextFormField(
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0.0-9.9]')),
+              FilteringTextInputFormatter.deny(','),
+            ],
             controller: priceController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: TextInputType.number,
@@ -87,7 +96,8 @@ class _BuyFormState extends State<BuyForm> {
           ),
           if (_showError)
             const Text(
-              "Please enter a valid amount",
+              "Please enter a valid amount \n Min 0.001, Max 5 BTC",
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.red,
               ),
