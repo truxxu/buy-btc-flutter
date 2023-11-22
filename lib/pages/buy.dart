@@ -104,14 +104,48 @@ class _BuyFormState extends State<BuyForm> {
             ),
           ElevatedButton(
             onPressed: () {
-              if (!_formKey.currentState!.validate()) {
-                debugPrint('success!');
+              if (_formKey.currentState!.validate()) {
+                showModal(context, inputValue, computedAmount);
               }
             },
             child: const Text("Buy"),
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> showModal(
+      BuildContext context, String inputValue, Decimal computedAmount) {
+    return showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 500,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                const Text(
+                  'Please verify your order',
+                ),
+                Text(
+                  'Amount: $inputValue BTC \n Total: $computedAmount USD',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                ElevatedButton(
+                  child: const Text('Accept'),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
