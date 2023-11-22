@@ -9,17 +9,28 @@ class Response extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Text('Your bitcoin is on the way'),
-              ElevatedButton(
-                child: const Text('Return'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                const Text(
+                  'Your bitcoin is on the way',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.amber, fontSize: 20),
+                ),
+                const Icon(
+                  Icons.verified,
+                  color: Colors.greenAccent,
+                  size: 200,
+                ),
+                ElevatedButton(
+                  child: const Text('Return'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
