@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:decimal/decimal.dart';
 
 class Buy extends StatelessWidget {
   const Buy({super.key});
@@ -41,9 +42,10 @@ class _BuyFormState extends State<BuyForm> {
 
   @override
   Widget build(BuildContext context) {
-    var price = 35500;
-    var inputValue = int.tryParse(priceController.text) ?? 0;
-    var computedAmount = inputValue * price;
+    var price = "35500.0";
+    var inputValue =
+        priceController.text.isNotEmpty ? priceController.text : "0";
+    var computedAmount = (Decimal.parse(inputValue) * Decimal.parse(price));
 
     return Form(
       key: _formKey,
