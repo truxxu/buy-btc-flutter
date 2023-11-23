@@ -107,7 +107,11 @@ class _BuyFormState extends State<BuyForm> {
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                showModal(context, inputValue, computedAmount);
+                showModal(
+                  context,
+                  inputValue,
+                  computedAmount,
+                );
               }
             },
             child: const Text("Buy"),
