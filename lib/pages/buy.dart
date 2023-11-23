@@ -18,7 +18,6 @@ class Buy extends StatefulWidget {
 
 class _BuyState extends State<Buy> {
   late Future<Price> futurePrice;
-  String _price = "";
 
   Future<Price> fetchPrice() async {
     final response = await http.get(Uri.parse(
