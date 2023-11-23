@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Response extends StatefulWidget {
   const Response({super.key});
@@ -57,6 +58,9 @@ class Success extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String txUrl =
+        'https://blockstream.info/tx/c732e1e672f25c58af1e5154462022176b68d2e769d53bbb56674bc2c7bf0e30';
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -70,12 +74,23 @@ class Success extends StatelessWidget {
           color: Colors.greenAccent,
           size: 200,
         ),
+        TextButton(
+          onPressed: () async {
+            Uri url = Uri.parse(txUrl);
+            if (await canLaunchUrl(url)) {
+              await launchUrl(url);
+            } else {
+              throw 'Could not launch $url';
+            }
+          },
+          child: const Text('Details'),
+        ),
         ElevatedButton(
           child: const Text('Return'),
           onPressed: () {
             Navigator.pop(context);
           },
-        )
+        ),
       ],
     );
   }
