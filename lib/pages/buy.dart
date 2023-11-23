@@ -1,19 +1,61 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 import 'response.dart';
+import '../models/price.dart';
 
-class Buy extends StatelessWidget {
+class Buy extends StatefulWidget {
   const Buy({super.key});
 
   @override
+  State<Buy> createState() => _BuyState();
+}
+
+class _BuyState extends State<Buy> {
+  late Future<Price> futurePrice;
+  String _price = "";
+
+  Future<Price> fetchPrice() async {
+    final response = await http.get(Uri.parse(
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'));
+
+    if (response.statusCode == 200) {
+      return Price.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to fetch price');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    futurePrice = fetchPrice();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(15),
-          child: BuyForm(),
+          padding: const EdgeInsets.all(15),
+          child: Center(
+            child: FutureBuilder<Price>(
+              future: futurePrice,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return BuyForm(price: snapshot.data!.price);
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+                return const CircularProgressIndicator();
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -21,9 +63,9 @@ class Buy extends StatelessWidget {
 }
 
 class BuyForm extends StatefulWidget {
-  const BuyForm({
-    super.key,
-  });
+  const BuyForm({super.key, required this.price});
+
+  final String price;
 
   @override
   State<BuyForm> createState() => _BuyFormState();
@@ -31,10 +73,10 @@ class BuyForm extends StatefulWidget {
 
 class _BuyFormState extends State<BuyForm> {
   final _formKey = GlobalKey<FormState>();
+  final priceController = TextEditingController();
 
   String? _validationError;
   bool get _showError => _validationError != null;
-  final priceController = TextEditingController();
 
   String? Function(String?)? get validator => (value) {
         if (value == null || value.isEmpty) {
@@ -49,10 +91,10 @@ class _BuyFormState extends State<BuyForm> {
 
   @override
   Widget build(BuildContext context) {
-    var price = "35500.0";
     var inputValue =
         priceController.text.isNotEmpty ? priceController.text : "0";
-    var computedAmount = (Decimal.parse(inputValue) * Decimal.parse(price));
+    var computedAmount =
+        (Decimal.parse(inputValue) * Decimal.parse(widget.price));
 
     return Form(
       key: _formKey,
@@ -107,7 +149,11 @@ class _BuyFormState extends State<BuyForm> {
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                showModal(context, inputValue, computedAmount);
+                showModal(
+                  context,
+                  inputValue,
+                  computedAmount,
+                );
               }
             },
             child: const Text("Buy"),
