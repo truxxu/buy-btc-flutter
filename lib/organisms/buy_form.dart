@@ -74,6 +74,11 @@ class _BuyFormState extends State<BuyForm> {
             decoration: const InputDecoration(
               border: InputBorder.none,
               hintText: "0",
+              isDense: true,
+              errorStyle: TextStyle(
+                color: Colors.red,
+                height: 0,
+              ),
             ),
           ),
           Text(
