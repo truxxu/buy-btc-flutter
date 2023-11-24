@@ -1,13 +1,44 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'organisms/bottom.dart';
+import 'pages/splash.dart';
 
 void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  bool _isLoading = true;
+  Timer? timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    timer = Timer(
+      const Duration(seconds: 2),
+      () {
+        setState(() {
+          _isLoading = false;
+        });
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    timer?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +54,7 @@ class MainApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      home: const Bottom(),
+      home: _isLoading ? const Splash() : const Bottom(),
     );
   }
 }
