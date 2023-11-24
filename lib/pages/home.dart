@@ -17,6 +17,7 @@ class Home extends StatelessWidget {
           padding: const EdgeInsets.all(15),
           child: Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Card(
                   shape: RoundedRectangleBorder(
