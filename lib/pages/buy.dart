@@ -73,27 +73,11 @@ class BuyForm extends StatefulWidget {
 class _BuyFormState extends State<BuyForm> {
   final _formKey = GlobalKey<FormState>();
   final priceController = TextEditingController();
-
-  String? _validationError;
-  bool get _showError => _validationError != null;
-
-  String? Function(String?)? get validator => (value) {
-        if (value == null || value.isEmpty) {
-          return 'error';
-        }
-        if (Decimal.parse(value) < Decimal.parse("0.001") ||
-            Decimal.parse(value) > Decimal.parse('5')) {
-          return 'error';
-        }
-        return null;
-      };
+  Decimal _computed = Decimal.parse('0');
 
   @override
   Widget build(BuildContext context) {
-    var inputValue =
-        priceController.text.isNotEmpty ? priceController.text : "0";
-    var computedAmount =
-        (Decimal.parse(inputValue) * Decimal.parse(widget.price));
+    String inputValue = priceController.text;
 
     return Form(
       key: _formKey,
@@ -112,13 +96,30 @@ class _BuyFormState extends State<BuyForm> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             keyboardType: TextInputType.number,
             validator: (value) {
-              final error = validator?.call(value);
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                setState(() {
-                  _validationError = error;
-                });
-              });
+              if (value == null || value.isEmpty) {
+                return 'Please enter a valid amount';
+              }
+              if (Decimal.parse(value) < Decimal.parse("0.001")) {
+                return 'Min. order 0.001BTC';
+              }
+              if (Decimal.parse(value) > Decimal.parse('5')) {
+                return 'Max. order 5 BTC';
+              }
               return null;
+            },
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                setState(
+                  () {
+                    _computed =
+                        Decimal.parse(value) * Decimal.parse(widget.price);
+                  },
+                );
+                return;
+              }
+              setState(() {
+                _computed = Decimal.parse('0');
+              });
             },
             showCursor: false,
             textAlign: TextAlign.center,
@@ -132,26 +133,18 @@ class _BuyFormState extends State<BuyForm> {
             ),
           ),
           Text(
-            '~ $computedAmount USD',
+            '~ $_computed USD',
           ),
           const SizedBox(
             height: 40,
           ),
-          if (_showError)
-            const Text(
-              "Please enter a valid amount \n Min 0.001, Max 5 BTC",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 showModal(
                   context,
                   inputValue,
-                  computedAmount,
+                  _computed,
                 );
               }
             },
