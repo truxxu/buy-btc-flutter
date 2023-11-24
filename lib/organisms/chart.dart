@@ -15,7 +15,7 @@ class Chart extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(10),
-          margin: const EdgeInsetsDirectional.only(end: 20),
+          margin: const EdgeInsetsDirectional.only(end: 20, start: 20),
           width: double.infinity,
           height: 300,
           child: LineChart(
@@ -36,6 +36,9 @@ class Chart extends StatelessWidget {
                   sideTitles: SideTitles(showTitles: false),
                 ),
                 rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                leftTitles: AxisTitles(
                   sideTitles: SideTitles(showTitles: false),
                 ),
                 bottomTitles: AxisTitles(

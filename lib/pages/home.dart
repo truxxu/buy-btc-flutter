@@ -79,18 +79,9 @@ class Content extends StatelessWidget {
     double test = int.parse(price) / int.parse('1000');
     var now = DateTime.now();
     var parsedDate = DateFormat.yMMMMEEEEd().format(now);
-    List<FlSpot> chartData = [
-      FlSpot(0, 1),
-      FlSpot(1, 3),
-      FlSpot(2, 10),
-      FlSpot(3, 7),
-      FlSpot(4, 12),
-      FlSpot(5, 13),
-      FlSpot(6, 17),
-      FlSpot(7, 15),
-      FlSpot(8, 20),
-    ];
-    // List<FlSpot> chartData = history.map((item) => FlSpot(item[0], item[1])).toList();
+    List<FlSpot> chartData = history
+        .map((item) => FlSpot(item[0].toDouble(), item[1].toDouble()))
+        .toList();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
