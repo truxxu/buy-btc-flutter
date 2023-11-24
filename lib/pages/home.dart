@@ -4,9 +4,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:fl_chart/fl_chart.dart';
 
 import '../organisms/chart.dart';
-import '../models/price.dart';
+import '../models/history.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,14 +17,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Future<Price> futurePrice;
+  late Future<History> futurePrice;
 
-  Future<Price> fetchPrice() async {
+  Future<History> fetchPrice() async {
     final response = await http.get(Uri.parse(
-        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'));
+        'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30&interval=daily&precision=0'));
 
     if (response.statusCode == 200) {
-      return Price.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      return History.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to fetch price');
     }
@@ -42,11 +44,13 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Center(
-            child: FutureBuilder<Price>(
+            child: FutureBuilder<History>(
               future: futurePrice,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Content(price: snapshot.data!.price);
+                  String priceStr = (snapshot.data!.price).toString();
+                  return Content(
+                      price: priceStr, history: snapshot.data!.history);
                 } else if (snapshot.hasError) {
                   return Text('${snapshot.error}');
                 }
@@ -64,15 +68,20 @@ class Content extends StatelessWidget {
   const Content({
     super.key,
     required this.price,
+    required this.history,
   });
 
   final String price;
+  final List history;
 
   @override
   Widget build(BuildContext context) {
     double test = int.parse(price) / int.parse('1000');
     var now = DateTime.now();
     var parsedDate = DateFormat.yMMMMEEEEd().format(now);
+    List<FlSpot> chartData = history
+        .map((item) => FlSpot(item[0].toDouble(), item[1].toDouble()))
+        .toList();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -100,7 +109,7 @@ class Content extends StatelessWidget {
             ),
           ),
         ),
-        const Chart(),
+        Chart(data: chartData),
       ],
     );
   }
