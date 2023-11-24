@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
 import '../organisms/chart.dart';
-import '../models/price.dart';
+import '../models/history.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,14 +16,15 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late Future<Price> futurePrice;
+  late Future<History> futurePrice;
 
-  Future<Price> fetchPrice() async {
+  Future<History> fetchPrice() async {
     final response = await http.get(Uri.parse(
-        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'));
+        'https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30&interval=daily&precision=0'));
 
     if (response.statusCode == 200) {
-      return Price.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
+      return History.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to fetch price');
     }
@@ -42,11 +43,11 @@ class _HomeState extends State<Home> {
         child: Padding(
           padding: const EdgeInsets.all(15),
           child: Center(
-            child: FutureBuilder<Price>(
+            child: FutureBuilder<History>(
               future: futurePrice,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Content(price: snapshot.data!.price);
+                  return Content(price: (snapshot.data!.price).toString());
                 } else if (snapshot.hasError) {
                   return Text('${snapshot.error}');
                 }
