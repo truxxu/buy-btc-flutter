@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class BuyForm extends StatefulWidget {
-  const BuyForm({super.key, required this.price});
+  const BuyForm({
+    super.key,
+    required this.price,
+  });
 
   final String price;
 

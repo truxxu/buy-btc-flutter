@@ -2,21 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class Chart extends StatelessWidget {
-  const Chart({super.key});
+  const Chart({
+    super.key,
+    required this.data,
+  });
+
+  final List<FlSpot> data;
 
   @override
   Widget build(BuildContext context) {
-    List<FlSpot> chartData = [
-      FlSpot(0, 1),
-      FlSpot(1, 3),
-      FlSpot(2, 10),
-      FlSpot(3, 7),
-      FlSpot(4, 12),
-      FlSpot(5, 13),
-      FlSpot(6, 17),
-      FlSpot(7, 15),
-      FlSpot(8, 20),
-    ];
     return Column(
       children: [
         Container(
@@ -28,7 +22,7 @@ class Chart extends StatelessWidget {
             LineChartData(
               lineBarsData: [
                 LineChartBarData(
-                  spots: chartData,
+                  spots: data,
                   isCurved: true,
                   dotData: const FlDotData(
                     show: false,

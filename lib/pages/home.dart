@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:fl_chart/fl_chart.dart';
 
 import '../organisms/chart.dart';
 import '../models/history.dart';
@@ -47,7 +48,9 @@ class _HomeState extends State<Home> {
               future: futurePrice,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Content(price: (snapshot.data!.price).toString());
+                  String priceStr = (snapshot.data!.price).toString();
+                  return Content(
+                      price: priceStr, history: snapshot.data!.history);
                 } else if (snapshot.hasError) {
                   return Text('${snapshot.error}');
                 }
@@ -65,15 +68,29 @@ class Content extends StatelessWidget {
   const Content({
     super.key,
     required this.price,
+    required this.history,
   });
 
   final String price;
+  final List history;
 
   @override
   Widget build(BuildContext context) {
     double test = int.parse(price) / int.parse('1000');
     var now = DateTime.now();
     var parsedDate = DateFormat.yMMMMEEEEd().format(now);
+    List<FlSpot> chartData = [
+      FlSpot(0, 1),
+      FlSpot(1, 3),
+      FlSpot(2, 10),
+      FlSpot(3, 7),
+      FlSpot(4, 12),
+      FlSpot(5, 13),
+      FlSpot(6, 17),
+      FlSpot(7, 15),
+      FlSpot(8, 20),
+    ];
+    // List<FlSpot> chartData = history.map((item) => FlSpot(item[0], item[1])).toList();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -101,7 +118,7 @@ class Content extends StatelessWidget {
             ),
           ),
         ),
-        const Chart(),
+        Chart(data: chartData),
       ],
     );
   }
