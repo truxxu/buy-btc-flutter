@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../organisms/chart.dart';
+
 class Home extends StatelessWidget {
   const Home({super.key});
 
@@ -38,7 +40,8 @@ class Home extends StatelessWidget {
                       ],
                     ),
                   ),
-                )
+                ),
+                const Chart(),
               ],
             ),
           ),
@@ -47,18 +50,3 @@ class Home extends StatelessWidget {
     );
   }
 }
-
-
-// const Column(
-//                     children: [
-//                       Padding(
-//                         padding: EdgeInsets.all(20),
-//                         child: Text(
-//                           "35.5K",
-//                           style: TextStyle(
-//                             fontSize: 50,
-//                             color: Colors.amber,
-//                           ),
-//                         ),
-//                       ),
-//                     ],
